@@ -1,0 +1,19 @@
+{
+  "Version": 1,
+  "Hash": "U8B1g0O/oS59AiHXiPk7gH7UENjGtiAsb8wWLzXc4Ic=",
+  "Source": "UserRegistrationApp",
+  "BasePath": "_content/UserRegistrationApp",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "UserRegistrationApp\\wwwroot",
+      "Source": "UserRegistrationApp",
+      "ContentRoot": "C:\\Users\\lasit\\OneDrive\\Desktop\\New folder\\UserManagementAPI With Verification Link\\UserRegistrationApp\\wwwroot\\",
+      "BasePath": "_content/UserRegistrationApp",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": []
+}

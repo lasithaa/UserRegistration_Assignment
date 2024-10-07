@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reset Password</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .reset-box {
+            background-color: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .message-box {
+            display: none;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+
+        .success {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .error {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        label {
+            display: block;
+            color: #333;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+
+    <script>
+        function getQueryParams() {
+            const params = new URLSearchParams(window.location.search);
+            return {
+                email: params.get('email'),
+                token: params.get('token')
+            };
+        }
+
+        async function submitForm(event) {
+            event.preventDefault(); 
+
+            const email = document.getElementById('email').value;
+            const token = document.getElementById('token').value;
+            const newPassword = document.getElementById('newPassword').value;
+
+            try {
+                const response = await fetch('https://localhost:7101/api/User/reset-password', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: new URLSearchParams({
+                        email: email,
+                        token: token,
+                        newPassword: newPassword
+                    })
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    showMessage('Password reset successfully!', 'success');
+                    document.getElementById('resetForm').style.display = 'none';
+                    document.getElementById('instructions').style.display = 'none';
+                } else {
+                    showMessage(result.message || 'Error resetting password. Please try again.', 'error');
+                }
+            } catch (error) {
+                showMessage('An unexpected error occurred. Please try again.', 'error');
+            }
+        }
+
+        function showMessage(message, type) {
+            const messageBox = document.getElementById('message-box');
+            messageBox.textContent = message;
+            messageBox.className = `message-box ${type}`;
+            messageBox.style.display = 'block';
+        }
+
+        window.onload = function() {
+            const queryParams = getQueryParams();
+            document.getElementById('email').value = queryParams.email;
+            document.getElementById('token').value = queryParams.token;
+        };
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="reset-box">
+            <h1 style="color: #333; font-size: 24px; margin-bottom: 24px;">Reset Your Password</h1>
+
+            <p id="instructions" style="color: #555; font-size: 16px; margin-bottom: 20px;">Please enter your new password below.</p>
+
+            <div id="message-box" class="message-box"></div>
+
+            <form id="resetForm" onsubmit="submitForm(event)">
+                <input type="hidden" id="email" name="email">
+                <input type="hidden" id="token" name="token">
+
+                <label for="newPassword">New Password:</label>
+                <input type="password" id="newPassword" name="newPassword" required>
+
+                <button type="submit">Reset Password</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
